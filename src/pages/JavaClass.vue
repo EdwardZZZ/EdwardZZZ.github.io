@@ -33,6 +33,7 @@ export default {
             const buff = await file.arrayBuffer();
 
             const info = new ClassReader(buff).getAllInfo();
+            info.dependClass = info.dependClass.sort();
 
             this.name = file.name;
             this.info = JSON.stringify(info, null, 4);
