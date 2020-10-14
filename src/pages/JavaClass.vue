@@ -1,7 +1,7 @@
 <template>
     <div class="file">
         <input class="file-input" type="file" @change="getFile" />
-        点击此处或者拖拽 class 文件至此处解析
+        Drag or upload *.class here
     </div>
     <div v-show="info" class="info">
         <h3>{{ name }}</h3>
@@ -35,6 +35,13 @@ export default {
             const info = new ClassReader(buff).getAllInfo();
             info.dependClass = info.dependClass.sort();
 
+            if (info.methodsInfo) {
+                info.methodsInfo.forEach((method = {}) => {
+                    if (method.LineNumberTable) delete method.LineNumberTable;
+                    if (method.entries) delete method.entries;
+                });
+            }
+
             this.name = file.name;
             this.info = JSON.stringify(info, null, 4);
         }
@@ -47,8 +54,15 @@ export default {
     position: relative;
     height: 100px;
     line-height: 100px;
-    font-size: 36px;
+    font-size: 24px;
     background: #e0e0e0;
+    word-break:keep-all;
+    white-space:nowrap;
+}
+@media screen and (min-width:800px){
+    .file {
+        font-size: 36px;
+    }
 }
 .file-input {
     position: absolute;
